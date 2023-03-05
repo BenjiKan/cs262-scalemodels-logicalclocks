@@ -32,9 +32,11 @@ def machine(config):
     pass
 
 def consumer(conn):
+    # each machine listens on its own consumer thread
+
     print("consumer accepted connection" + str(conn)+"\n")
     msg_queue=[]
-    sleepVal = 0.900
+    sleepVal = 0.900 # proxy for clock rate
     while True:
         time.sleep(sleepVal)
         data = conn.recv(1024)
@@ -45,10 +47,12 @@ def consumer(conn):
  
 
 def producer(portVal):
+    # tries to initiate connection to another port
+
     host= "127.0.0.1"
     port = int(portVal)
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    sleepVal = 0.500
+    sleepVal = 0.500 # proxy for clock rate
     #sema acquire
     try:
         s.connect((host,port))
@@ -82,12 +86,12 @@ def machine(config):
     config.append(os.getpid())
     global code
     #print(config)
-    init_thread = Thread(target=init_machine, args=(config,))
+    init_thread = Thread(target=init_machine, args=(config,)) # start a thread for the consumer, to listen
     init_thread.start()
     #add delay to initialize the server-side logic on all processes
     time.sleep(5)
     # extensible to multiple producers
-    prod_thread = Thread(target=producer, args=(config[2],))
+    prod_thread = Thread(target=producer, args=(config[2],)) # start a thread for the producer, to send
     prod_thread.start()
  
 
@@ -105,6 +109,7 @@ if __name__ == '__main__':
     port3 = 4056
     
 
+    # each connection is bidirectional, so only need three connections
     config1=[localHost, port1, port2,]
     p1 = Process(target=machine, args=(config1,))
     config2=[localHost, port2, port3]
