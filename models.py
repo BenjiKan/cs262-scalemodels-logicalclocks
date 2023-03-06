@@ -11,31 +11,31 @@ from _thread import *
 # class Clock
 
 
-def machine(config):
-    # virtual machine that starts a clock
-    # config is a dictionary with the following keys:
-    #   'name' - name of the machine
-    #   'ip' - ip address of the machine
-    #   'port' - port number of the machine
-    #   'clock' - clock type
-    #   'offset' - offset of the clock
-    #   'drift' - drift of the clock
+# def machine(config):
+#     # virtual machine that starts a clock
+#     # config is a dictionary with the following keys:
+#     #   'name' - name of the machine
+#     #   'ip' - ip address of the machine
+#     #   'port' - port number of the machine
+#     #   'clock' - clock type
+#     #   'offset' - offset of the clock
+#     #   'drift' - drift of the clock
 
-    # create a socket
+#     # create a socket
 
-    # bind the socket to the ip and port
-    # listen for connections
-    # accept connections
-    # receive data
-    # send data
-    # close the socket
-    pass
+#     # bind the socket to the ip and port
+#     # listen for connections
+#     # accept connections
+#     # receive data
+#     # send data
+#     # close the socket
+#     pass
 
 def consumer(conn):
-    # each machine listens on its own consumer thread
+    # each machine listens on its own consumer thread, which initializes its queue
 
     print("consumer accepted connection" + str(conn)+"\n")
-    msg_queue=[]
+    # msg_queue=[]
     sleepVal = 0.900 # proxy for clock rate
     while True:
         time.sleep(sleepVal)
@@ -49,10 +49,12 @@ def consumer(conn):
 def producer(portVal):
     # tries to initiate connection to another port
 
-    host= "127.0.0.1"
+    host = "127.0.0.1" # localhots
     port = int(portVal)
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    sleepVal = 0.500 # proxy for clock rate
+    sleepVal = 1.0/clock_rate
+    print(sleepVal)
+
     #sema acquire
     try:
         s.connect((host,port))
@@ -60,10 +62,55 @@ def producer(portVal):
  
 
         while True:
-            codeVal = str(code)
-            time.sleep(sleepVal)
+            # update clock value immediately
+            clock_value += 1
+            
+            # if msg_queue is not empty, then read the first message in the queue
+            if len(msg_queue) > 0:
+                msg = msg_queue.pop(0)
+                print("msg received:", msg)
+                # if msg is greater than clock_value, then update clock_value
+                if int(msg) > clock_value:
+                    clock_value = int(msg)
+                    print("clock updated:", clock_value)
+                else:
+                    print("clock not updated:", clock_value)
+
+            # if msg_queue empty, generate own event and follow instructions   
+            else:
+                prob = random.randint(1, 10)
+                # if prob == 1, then send message to first other process
+                if prob == 1:
+                    print("msg sent", clock_value)
+                    codeVal = str(clock_value)
+                    s.send(codeVal.encode('ascii'))
+                # if prob == 2, then send message to second other process
+                if prob == 2:
+                    print("msg sent", clock_value)
+                    codeVal = str(clock_value)
+                    s.send(codeVal.encode('ascii'))
+                # if prob == 3, then send message to both processes
+                if prob == 3:
+                    print("msg sent", clock_value)
+                    codeVal = str(clock_value)
+                    s.send(codeVal.encode('ascii'))
+                    print("msg sent", clock_value)
+                    codeVal = str(clock_value)
+                    s.send(codeVal.encode('ascii'))
+                # else, internal event
+                else:
+                    pass 
+
+
+                    
+                
+
+            codeVal = str(clock_value)
             s.send(codeVal.encode('ascii'))
             print("msg sent", codeVal)
+
+            time.sleep(sleepVal)
+
     
 
     except socket.error as e:
@@ -73,7 +120,7 @@ def producer(portVal):
 def init_machine(config):
     HOST = str(config[0])
     PORT = int(config[1])
-    print("starting server| port val:", PORT)
+    print("starting server| port val:", PORT, "clock rate:", clock_rate)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
     s.listen()
@@ -84,19 +131,38 @@ def init_machine(config):
 
 def machine(config):
     config.append(os.getpid())
-    global code
-    #print(config)
+    # initialize the logical clock value for the process
+    global clock_value 
+    clock_value = 0
+
+    # initialize the queue for the process
+    global msg_queue
+    msg_queue = []
+
+    # initialize clock rate for process
+    global clock_rate
+    clock_rate = random.randint(1, 6)
+
+    # initialize the logging for the process
+    # TODO
+    # logging.basicConfig(filename='process'+str(config[3])+'.log',level=logging.DEBUG)
+
+    
+    # initialize listeners
     init_thread = Thread(target=init_machine, args=(config,)) # start a thread for the consumer, to listen
     init_thread.start()
+
     #add delay to initialize the server-side logic on all processes
     time.sleep(5)
+
     # extensible to multiple producers
     prod_thread = Thread(target=producer, args=(config[2],)) # start a thread for the producer, to send
     prod_thread.start()
  
-
     while True:
-        code = random.randint(1,3)
+        time.sleep(1)
+        print("Machine:", int(config[1])-5550, "(clock rate %d)"%(clock_rate), "logical clock value:", clock_value)
+        # print("msg queue:", msg_queue)
 
 
 
@@ -104,9 +170,9 @@ localHost= "127.0.0.1"
     
 
 if __name__ == '__main__':
-    port1 = 2056
-    port2 = 3056
-    port3 = 4056
+    port1 = 5551
+    port2 = 5552
+    port3 = 5553
     
 
     # each connection is bidirectional, so only need three connections
