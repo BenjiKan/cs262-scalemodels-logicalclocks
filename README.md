@@ -16,7 +16,13 @@ For each of three virtual machines, the consumer will always be listening on the
 
 On each machine, in its producer thread, we connect to the other two machine's sockets. It is via these connections that messages are sent. Within each machine's producer thread, we simulate the events per the spec: updating the internal logical clock value each tick and then generating a random integer, which determines whether to treat it as an internal event or sending a message to either one or both of the other machines.
 
+This enables the die roll for the event to be isolated to the producer thread, which minimizes overheard. Allowing the consumer thread to listen in a busy loop without having to send also prevents deadlock, and circumvents needing to wait during send, which sometimes causes received messages to be jumbled and concatenating logical clock values.
 
+## Experiment Observations
+In the logs, we see that there is generally greater drift when the clock rates between the three machines differ the most (e.g. `d10-1-2-4` and `d10-1-2-5`).
 
+Indeed, we note that the Lamport clock construction ensures that the logical clock values are determined by the largest logical value in a distributed system. Then, the synchronization of the slower clocks is only determined by their tick speeds, as well as the send rate of the fastest clock. Since the fastest logical clock will tick by exactly its clock rate each second, the final "true" logical clock value of any experiment should be roughly `60*max`, where `max` is the largest clock rate of the three processes; any deviations are due to drift.
 
+Sometimes, if the send rate of the fastest machine is greater than the tick rate of the slowest machine, then the slowest machine will experience increasing drift and simply never synchronize. That is, the queue length continues to grow until the slow machine is hopelessly out of sync with the others. Mathematically, this occurs when `max*2/d > min`, where `d` is the dice size for the event probabilities, and `max` and `min` refer to the largest and smallest clock rates, respectively. This can be most clearly seen in `d5-1-4-7`, where the final queue length is 118 by the end for the slowest macine, and we see that the queue has been steadily growing throughout the runtime of the experiment.
 
+Conversely, when there is a smaller variation in clock cycles and smaller internal events (thus relatively higher send rates), the machines tend to stay more synchronized. When the clock rates do not differ much, there are few jumps due to message receives and the clocks stay roughly aligned (e.g. `d10-1-2-2` and `d10-2-3-3`). 
