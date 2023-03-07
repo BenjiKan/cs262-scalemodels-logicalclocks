@@ -1,0 +1,156 @@
+2023-03-06 22:40:16 INFO     Log set up for process 2 with clock rate 2
+2023-03-06 22:40:21 INFO     msg sent, logical clock time: 1
+2023-03-06 22:40:21 INFO     internal event, logical clock time: 1
+2023-03-06 22:40:22 INFO     msg received, logical clock time: 2 queue length: 0
+2023-03-06 22:40:22 INFO     internal event, logical clock time: 3
+2023-03-06 22:40:23 INFO     internal event, logical clock time: 4
+2023-03-06 22:40:23 INFO     msg received, logical clock time: 5 queue length: 0
+2023-03-06 22:40:24 INFO     internal event, logical clock time: 6
+2023-03-06 22:40:24 INFO     internal event, logical clock time: 7
+2023-03-06 22:40:25 INFO     msg received, logical clock time: 8 queue length: 0
+2023-03-06 22:40:25 INFO     internal event, logical clock time: 9
+2023-03-06 22:40:26 INFO     msg sent, logical clock time: 10
+2023-03-06 22:40:26 INFO     internal event, logical clock time: 10
+2023-03-06 22:40:26 INFO     internal event, logical clock time: 11
+2023-03-06 22:40:27 INFO     msg sent, logical clock time: 12
+2023-03-06 22:40:27 INFO     msg sent, logical clock time: 13
+2023-03-06 22:40:27 INFO     internal event, logical clock time: 13
+2023-03-06 22:40:28 INFO     msg sent, logical clock time: 14
+2023-03-06 22:40:28 INFO     internal event, logical clock time: 14
+2023-03-06 22:40:28 INFO     msg sent, logical clock time: 15
+2023-03-06 22:40:28 INFO     internal event, logical clock time: 15
+2023-03-06 22:40:29 INFO     internal event, logical clock time: 16
+2023-03-06 22:40:29 INFO     internal event, logical clock time: 17
+2023-03-06 22:40:30 INFO     msg sent, logical clock time: 18
+2023-03-06 22:40:30 INFO     internal event, logical clock time: 18
+2023-03-06 22:40:30 INFO     internal event, logical clock time: 19
+2023-03-06 22:40:31 INFO     msg sent, logical clock time: 20
+2023-03-06 22:40:31 INFO     internal event, logical clock time: 20
+2023-03-06 22:40:31 INFO     internal event, logical clock time: 21
+2023-03-06 22:40:32 INFO     internal event, logical clock time: 22
+2023-03-06 22:40:32 INFO     internal event, logical clock time: 23
+2023-03-06 22:40:33 INFO     msg sent, logical clock time: 24
+2023-03-06 22:40:33 INFO     internal event, logical clock time: 25
+2023-03-06 22:40:34 INFO     msg received, logical clock time: 26 queue length: 1
+2023-03-06 22:40:34 INFO     msg received, logical clock time: 27 queue length: 0
+2023-03-06 22:40:35 INFO     internal event, logical clock time: 28
+2023-03-06 22:40:35 INFO     msg sent, logical clock time: 29
+2023-03-06 22:40:35 INFO     internal event, logical clock time: 29
+2023-03-06 22:40:36 INFO     msg sent, logical clock time: 30
+2023-03-06 22:40:36 INFO     internal event, logical clock time: 30
+2023-03-06 22:40:36 INFO     internal event, logical clock time: 31
+2023-03-06 22:40:37 INFO     msg sent, logical clock time: 32
+2023-03-06 22:40:37 INFO     internal event, logical clock time: 33
+2023-03-06 22:40:38 INFO     internal event, logical clock time: 34
+2023-03-06 22:40:38 INFO     msg received, logical clock time: 35 queue length: 0
+2023-03-06 22:40:39 INFO     msg received, logical clock time: 36 queue length: 0
+2023-03-06 22:40:39 INFO     internal event, logical clock time: 37
+2023-03-06 22:40:40 INFO     internal event, logical clock time: 38
+2023-03-06 22:40:40 INFO     internal event, logical clock time: 39
+2023-03-06 22:40:41 INFO     msg sent, logical clock time: 40
+2023-03-06 22:40:41 INFO     internal event, logical clock time: 41
+2023-03-06 22:40:42 INFO     msg sent, logical clock time: 42
+2023-03-06 22:40:42 INFO     internal event, logical clock time: 42
+2023-03-06 22:40:42 INFO     internal event, logical clock time: 43
+2023-03-06 22:40:43 INFO     internal event, logical clock time: 44
+2023-03-06 22:40:44 INFO     msg sent, logical clock time: 45
+2023-03-06 22:40:44 INFO     internal event, logical clock time: 45
+2023-03-06 22:40:44 INFO     internal event, logical clock time: 46
+2023-03-06 22:40:45 INFO     msg received, logical clock time: 47 queue length: 1
+2023-03-06 22:40:45 INFO     msg received, logical clock time: 48 queue length: 0
+2023-03-06 22:40:46 INFO     msg received, logical clock time: 49 queue length: 0
+2023-03-06 22:40:46 INFO     internal event, logical clock time: 50
+2023-03-06 22:40:47 INFO     msg sent, logical clock time: 51
+2023-03-06 22:40:47 INFO     internal event, logical clock time: 52
+2023-03-06 22:40:48 INFO     msg sent, logical clock time: 53
+2023-03-06 22:40:48 INFO     internal event, logical clock time: 53
+2023-03-06 22:40:48 INFO     internal event, logical clock time: 54
+2023-03-06 22:40:49 INFO     internal event, logical clock time: 55
+2023-03-06 22:40:49 INFO     internal event, logical clock time: 56
+2023-03-06 22:40:50 INFO     msg received, logical clock time: 57 queue length: 0
+2023-03-06 22:40:50 INFO     msg sent, logical clock time: 58
+2023-03-06 22:40:51 INFO     msg received, logical clock time: 59 queue length: 0
+2023-03-06 22:40:51 INFO     msg sent, logical clock time: 60
+2023-03-06 22:40:52 INFO     internal event, logical clock time: 61
+2023-03-06 22:40:52 INFO     internal event, logical clock time: 62
+2023-03-06 22:40:53 INFO     internal event, logical clock time: 63
+2023-03-06 22:40:53 INFO     internal event, logical clock time: 64
+2023-03-06 22:40:54 INFO     internal event, logical clock time: 65
+2023-03-06 22:40:54 INFO     internal event, logical clock time: 66
+2023-03-06 22:40:55 INFO     internal event, logical clock time: 67
+2023-03-06 22:40:55 INFO     internal event, logical clock time: 68
+2023-03-06 22:40:56 INFO     msg received, logical clock time: 69 queue length: 0
+2023-03-06 22:40:56 INFO     internal event, logical clock time: 70
+2023-03-06 22:40:57 INFO     msg sent, logical clock time: 71
+2023-03-06 22:40:57 INFO     internal event, logical clock time: 71
+2023-03-06 22:40:57 INFO     internal event, logical clock time: 72
+2023-03-06 22:40:58 INFO     msg received, logical clock time: 73 queue length: 0
+2023-03-06 22:40:58 INFO     msg sent, logical clock time: 74
+2023-03-06 22:40:58 INFO     internal event, logical clock time: 74
+2023-03-06 22:40:59 INFO     msg received, logical clock time: 75 queue length: 0
+2023-03-06 22:40:59 INFO     msg sent, logical clock time: 76
+2023-03-06 22:40:59 INFO     internal event, logical clock time: 76
+2023-03-06 22:41:00 INFO     internal event, logical clock time: 77
+2023-03-06 22:41:00 INFO     msg received, logical clock time: 78 queue length: 0
+2023-03-06 22:41:01 INFO     internal event, logical clock time: 79
+2023-03-06 22:41:01 INFO     msg sent, logical clock time: 80
+2023-03-06 22:41:02 INFO     msg sent, logical clock time: 81
+2023-03-06 22:41:02 INFO     internal event, logical clock time: 82
+2023-03-06 22:41:03 INFO     msg sent, logical clock time: 83
+2023-03-06 22:41:03 INFO     internal event, logical clock time: 83
+2023-03-06 22:41:03 INFO     msg sent, logical clock time: 84
+2023-03-06 22:41:03 INFO     internal event, logical clock time: 84
+2023-03-06 22:41:04 INFO     msg sent, logical clock time: 85
+2023-03-06 22:41:04 INFO     internal event, logical clock time: 85
+2023-03-06 22:41:04 INFO     internal event, logical clock time: 86
+2023-03-06 22:41:05 INFO     internal event, logical clock time: 87
+2023-03-06 22:41:05 INFO     internal event, logical clock time: 88
+2023-03-06 22:41:06 INFO     msg sent, logical clock time: 89
+2023-03-06 22:41:06 INFO     internal event, logical clock time: 89
+2023-03-06 22:41:06 INFO     msg sent, logical clock time: 90
+2023-03-06 22:41:06 INFO     internal event, logical clock time: 90
+2023-03-06 22:41:07 INFO     msg sent, logical clock time: 91
+2023-03-06 22:41:07 INFO     internal event, logical clock time: 91
+2023-03-06 22:41:07 INFO     internal event, logical clock time: 92
+2023-03-06 22:41:08 INFO     internal event, logical clock time: 93
+2023-03-06 22:41:08 INFO     internal event, logical clock time: 94
+2023-03-06 22:41:09 INFO     msg received, logical clock time: 95 queue length: 0
+2023-03-06 22:41:09 INFO     internal event, logical clock time: 96
+2023-03-06 22:41:10 INFO     internal event, logical clock time: 97
+2023-03-06 22:41:10 INFO     msg received, logical clock time: 98 queue length: 0
+2023-03-06 22:41:11 INFO     internal event, logical clock time: 99
+2023-03-06 22:41:11 INFO     msg sent, logical clock time: 100
+2023-03-06 22:41:12 INFO     msg sent, logical clock time: 101
+2023-03-06 22:41:12 INFO     msg sent, logical clock time: 102
+2023-03-06 22:41:13 INFO     internal event, logical clock time: 103
+2023-03-06 22:41:13 INFO     msg sent, logical clock time: 104
+2023-03-06 22:41:14 INFO     internal event, logical clock time: 105
+2023-03-06 22:41:14 INFO     internal event, logical clock time: 106
+2023-03-06 22:41:15 INFO     internal event, logical clock time: 107
+2023-03-06 22:41:15 INFO     msg sent, logical clock time: 108
+2023-03-06 22:41:16 INFO     msg sent, logical clock time: 109
+2023-03-06 22:41:16 INFO     internal event, logical clock time: 109
+2023-03-06 22:41:16 INFO     internal event, logical clock time: 110
+2023-03-06 22:41:17 INFO     internal event, logical clock time: 111
+2023-03-06 22:41:17 INFO     internal event, logical clock time: 112
+2023-03-06 22:41:18 INFO     internal event, logical clock time: 113
+2023-03-06 22:41:18 INFO     msg sent, logical clock time: 114
+2023-03-06 22:41:18 INFO     internal event, logical clock time: 114
+2023-03-06 22:41:19 INFO     msg sent, logical clock time: 115
+2023-03-06 22:41:19 INFO     internal event, logical clock time: 115
+2023-03-06 22:41:19 INFO     msg sent, logical clock time: 116
+2023-03-06 22:41:19 INFO     internal event, logical clock time: 116
+2023-03-06 22:41:20 INFO     msg received, logical clock time: 117 queue length: 0
+2023-03-06 22:41:20 INFO     msg sent, logical clock time: 118
+2023-03-06 22:41:20 INFO     internal event, logical clock time: 118
+2023-03-06 22:41:21 INFO     msg sent, logical clock time: 119
+2023-03-06 22:41:21 INFO     internal event, logical clock time: 120
+2023-03-06 22:41:22 INFO     internal event, logical clock time: 121
+2023-03-06 22:41:22 INFO     msg received, logical clock time: 122 queue length: 0
+2023-03-06 22:41:23 INFO     msg received, logical clock time: 123 queue length: 0
+2023-03-06 22:41:23 INFO     msg received, logical clock time: 124 queue length: 0
+2023-03-06 22:41:24 INFO     internal event, logical clock time: 125
+2023-03-06 22:41:24 INFO     msg sent, logical clock time: 126
+2023-03-06 22:41:24 INFO     internal event, logical clock time: 126
+2023-03-06 22:41:25 INFO     msg sent, logical clock time: 127
+2023-03-06 22:41:25 INFO     internal event, logical clock time: 128

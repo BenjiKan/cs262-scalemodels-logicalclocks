@@ -3,112 +3,100 @@ import time
 import random
 from threading import Thread
 from multiprocessing import Process, Queue
-import logging
+import logging, sys
 
 import os
 from _thread import *
 
-# class Clock
-
-
-# def machine(config):
-#     # virtual machine that starts a clock
-#     # config is a dictionary with the following keys:
-#     #   'name' - name of the machine
-#     #   'ip' - ip address of the machine
-#     #   'port' - port number of the machine
-#     #   'clock' - clock type
-#     #   'offset' - offset of the clock
-#     #   'drift' - drift of the clock
-
-#     # create a socket
-
-#     # bind the socket to the ip and port
-#     # listen for connections
-#     # accept connections
-#     # receive data
-#     # send data
-#     # close the socket
-#     pass
+def setup_custom_logger(name):
+    # adapted from https://stackoverflow.com/a/28330410
+    # set up logging to file - see previous section for more details
+    formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                                  datefmt='%Y-%m-%d %H:%M:%S')
+    # handler = logging.FileHandler('log.txt', mode='w')
+    handler = logging.FileHandler(name+'.log', mode='w')
+    handler.setFormatter(formatter)
+    screen_handler = logging.StreamHandler(stream=sys.stdout)
+    screen_handler.setFormatter(formatter)
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
+    logger.addHandler(handler)
+    logger.addHandler(screen_handler)
+    return logger
 
 def consumer(conn):
     # each machine listens on its own consumer thread, which initializes its queue
 
     print("consumer accepted connection" + str(conn)+"\n")
-    # msg_queue=[]
-    sleepVal = 0.900 # proxy for clock rate
     while True:
-        time.sleep(sleepVal)
         data = conn.recv(1024)
-        print("msg received\n")
         dataVal = data.decode('ascii')
-        print("msg received:", dataVal)
         msg_queue.append(dataVal)
  
 
-def producer(portVal):
+def producer(portVal1, portVal2):
     # tries to initiate connection to another port
 
     host = "127.0.0.1" # localhots
-    port = int(portVal)
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    port_first = int(portVal1)
+    port_second = int(portVal2)
+    s1 = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    s2 = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     sleepVal = 1.0/clock_rate
-    print(sleepVal)
+    # print(sleepVal)
 
     #sema acquire
     try:
-        s.connect((host,port))
-        print("Client-side connection success to port val:" + str(portVal) + "\n")
- 
+        s1.connect((host,port_first))
+        print("Client-side connection success to port val:" + str(portVal1) + "\n")
+        s2.connect((host,port_second))
+        print("Client-side connection success to port val:" + str(portVal2) + "\n")
 
         while True:
             # update clock value immediately
+            global clock_value
             clock_value += 1
-            
+
+
             # if msg_queue is not empty, then read the first message in the queue
             if len(msg_queue) > 0:
                 msg = msg_queue.pop(0)
-                print("msg received:", msg)
                 # if msg is greater than clock_value, then update clock_value
                 if int(msg) > clock_value:
                     clock_value = int(msg)
-                    print("clock updated:", clock_value)
-                else:
-                    print("clock not updated:", clock_value)
+                    # print("clock updated:", clock_value)
+                # else:
+                    # print("clock not updated:", clock_value)
+                
+                logger.info("msg received, logical clock time: "+str(clock_value)+" queue length: "+str(len(msg_queue)))
 
             # if msg_queue empty, generate own event and follow instructions   
             else:
-                prob = random.randint(1, 10)
+                prob = random.randint(1, events_prob)
                 # if prob == 1, then send message to first other process
                 if prob == 1:
-                    print("msg sent", clock_value)
+                    # print("msg sent 1", clock_value)
                     codeVal = str(clock_value)
-                    s.send(codeVal.encode('ascii'))
+                    s1.send(codeVal.encode('ascii'))
+                    logger.info("msg sent, logical clock time: "+str(clock_value))
                 # if prob == 2, then send message to second other process
                 if prob == 2:
-                    print("msg sent", clock_value)
+                    # print("msg sent 2", clock_value)
                     codeVal = str(clock_value)
-                    s.send(codeVal.encode('ascii'))
+                    s2.send(codeVal.encode('ascii'))
+                    logger.info("msg sent, logical clock time: "+str(clock_value))
                 # if prob == 3, then send message to both processes
                 if prob == 3:
-                    print("msg sent", clock_value)
+                    # print("msg sent BOTH", clock_value)
                     codeVal = str(clock_value)
-                    s.send(codeVal.encode('ascii'))
-                    print("msg sent", clock_value)
-                    codeVal = str(clock_value)
-                    s.send(codeVal.encode('ascii'))
+                    s1.send(codeVal.encode('ascii'))
+                    s2.send(codeVal.encode('ascii'))
+                    logger.info("msg sent, logical clock time: "+str(clock_value))
                 # else, internal event
                 else:
-                    pass 
-
-
-                    
-                
-
-            codeVal = str(clock_value)
-            s.send(codeVal.encode('ascii'))
-            print("msg sent", codeVal)
-
+                    logger.info("internal event, logical clock time: "+str(clock_value)) 
+            
+            # wait before next action
             time.sleep(sleepVal)
 
     
@@ -143,11 +131,16 @@ def machine(config):
     global clock_rate
     clock_rate = random.randint(1, 6)
 
-    # initialize the logging for the process
-    # TODO
-    # logging.basicConfig(filename='process'+str(config[3])+'.log',level=logging.DEBUG)
+    # initialize the probability of an event
+    global events_prob
+    events_prob = 5
 
-    
+    # initialize the logging for the process
+    global logger
+    logger = setup_custom_logger('process'+str(config[1]-5550))
+    logger.info("Log set up for process "+str(config[1]-5550)+" with clock rate "+str(clock_rate))
+    # print("logging initialized for process", config[1]-5550)
+
     # initialize listeners
     init_thread = Thread(target=init_machine, args=(config,)) # start a thread for the consumer, to listen
     init_thread.start()
@@ -155,15 +148,13 @@ def machine(config):
     #add delay to initialize the server-side logic on all processes
     time.sleep(5)
 
-    # extensible to multiple producers
-    prod_thread = Thread(target=producer, args=(config[2],)) # start a thread for the producer, to send
+    # extensible to multiple producers, we just use one producer that connects to two threads though
+    prod_thread = Thread(target=producer, args=(config[2], config[3],)) # start a thread for the producer, to send
     prod_thread.start()
  
-    while True:
-        time.sleep(1)
-        print("Machine:", int(config[1])-5550, "(clock rate %d)"%(clock_rate), "logical clock value:", clock_value)
-        # print("msg queue:", msg_queue)
-
+    # while True:
+    #     time.sleep(1)
+    #     print("Machine:", int(config[1])-5550, "(clock rate %d)"%(clock_rate), "logical clock value:", clock_value)
 
 
 localHost= "127.0.0.1"
@@ -175,12 +166,12 @@ if __name__ == '__main__':
     port3 = 5553
     
 
-    # each connection is bidirectional, so only need three connections
-    config1=[localHost, port1, port2,]
+    # each config is structured as [host, listening port, sending port 1, sending port 2]
+    config1=[localHost, port1, port2, port3]
     p1 = Process(target=machine, args=(config1,))
-    config2=[localHost, port2, port3]
+    config2=[localHost, port2, port3, port1]
     p2 = Process(target=machine, args=(config2,))
-    config3=[localHost, port3, port1]
+    config3=[localHost, port3, port1, port2]
     p3 = Process(target=machine, args=(config3,))
     
 
@@ -188,7 +179,6 @@ if __name__ == '__main__':
     p2.start()
     p3.start()
     
-
     p1.join()
     p2.join()
     p3.join()
