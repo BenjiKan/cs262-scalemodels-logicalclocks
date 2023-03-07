@@ -133,7 +133,7 @@ def machine(config):
 
     # initialize the probability of an event
     global events_prob
-    events_prob = 5
+    events_prob = 10
 
     # initialize the logging for the process
     global logger
