@@ -1,6 +1,9 @@
 # cs262-scalemodels-logicalclocks
 CS 262 Design Exercise 2: Scale Models and Logical Clocks
 
+# Setup
+To run the simulation, simply do `python models.py` in the command line, which will create 3 logs in the main directory: `process1.log`, `process2.log`,`process3.log`. Stop the simulation after about one minute, and move the logs into desired folder.
+
 ## Data Logs
 Each experiment is saved in a separate folder containing a log for each process under the experiments directory, named as follows:
 ```d[event prob]-[clock rate 1]-[clock rate 2]-[clock rate 3]```
