@@ -32,11 +32,35 @@ def consumer(conn):
         dataVal = data.decode('ascii')
         msg_queue.append(dataVal)
  
+def producer_run_random_event(logger, s1: socket.socket, s2: socket.socket):
+    prob = random.randint(1, events_prob)
+    # if prob == 1, then send message to first other process
+    if prob == 1:
+        # print("msg sent 1", clock_value)
+        codeVal = str(clock_value)
+        s1.send(codeVal.encode('ascii'))
+        logger.info("msg sent, logical clock time: "+str(clock_value))
+    # if prob == 2, then send message to second other process
+    elif prob == 2:
+        # print("msg sent 2", clock_value)
+        codeVal = str(clock_value)
+        s2.send(codeVal.encode('ascii'))
+        logger.info("msg sent, logical clock time: "+str(clock_value))
+    # if prob == 3, then send message to both processes
+    elif prob == 3:
+        # print("msg sent BOTH", clock_value)
+        codeVal = str(clock_value)
+        s1.send(codeVal.encode('ascii'))
+        s2.send(codeVal.encode('ascii'))
+        logger.info("msg sent, logical clock time: "+str(clock_value))
+    # else, internal event
+    else:
+        logger.info("internal event, logical clock time: "+str(clock_value))
 
-def producer(portVal1, portVal2):
+def producer(logger, portVal1, portVal2):
     # tries to initiate connection to another port
 
-    host = "127.0.0.1" # localhots
+    host = "127.0.0.1" # localhost
     port_first = int(portVal1)
     port_second = int(portVal2)
     s1 = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -67,29 +91,7 @@ def producer(portVal1, portVal2):
 
             # if msg_queue empty, generate own event and follow instructions   
             else:
-                prob = random.randint(1, events_prob)
-                # if prob == 1, then send message to first other process
-                if prob == 1:
-                    # print("msg sent 1", clock_value)
-                    codeVal = str(clock_value)
-                    s1.send(codeVal.encode('ascii'))
-                    logger.info("msg sent, logical clock time: "+str(clock_value))
-                # if prob == 2, then send message to second other process
-                if prob == 2:
-                    # print("msg sent 2", clock_value)
-                    codeVal = str(clock_value)
-                    s2.send(codeVal.encode('ascii'))
-                    logger.info("msg sent, logical clock time: "+str(clock_value))
-                # if prob == 3, then send message to both processes
-                if prob == 3:
-                    # print("msg sent BOTH", clock_value)
-                    codeVal = str(clock_value)
-                    s1.send(codeVal.encode('ascii'))
-                    s2.send(codeVal.encode('ascii'))
-                    logger.info("msg sent, logical clock time: "+str(clock_value))
-                # else, internal event
-                else:
-                    logger.info("internal event, logical clock time: "+str(clock_value)) 
+                producer_run_random_event(logger, s1, s2)
             
             # wait before next action
             time.sleep(sleepVal)
@@ -111,6 +113,11 @@ def init_machine(config):
         conn, addr = s.accept()
         start_new_thread(consumer, (conn,))
  
+
+clock_rate = random.randint(1, 6)
+clock_value = 0
+msg_queue = []
+events_prob = 10
 
 def machine(config):
     config.append(os.getpid())
@@ -144,7 +151,7 @@ def machine(config):
     time.sleep(5)
 
     # extensible to multiple producers, we just use one producer that connects to two threads though
-    prod_thread = Thread(target=producer, args=(config[2], config[3],)) # start a thread for the producer, to send
+    prod_thread = Thread(target=producer, args=(logger,config[2], config[3],)) # start a thread for the producer, to send
     prod_thread.start()
  
 
