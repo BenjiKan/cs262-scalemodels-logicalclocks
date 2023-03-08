@@ -116,7 +116,18 @@ class TestModel(unittest.TestCase):
             mock1.send.assert_not_called()
             mock2.send.assert_not_called()
 
+class TestLogger(unittest.TestCase):
+    def test_setup_custom_logger(self):
+        logger_name = 'test_logger'
+        setup_custom_logger(logger_name)
+        # logger = logging.getLogger(logger_name)
 
+        # check that log file
+        self.assertTrue(os.path.exists(logger_name+'.log'))
+
+    def delete(self):
+        os.remove(logger_name+'.log')
+        
 if __name__=="__main__":
     print('\033[1m' + '\033[96m' + "\nUse Ctrl-C for KeyboardInterrupts\n" + '\033[0m')
     unittest.main()
