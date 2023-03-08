@@ -1,0 +1,69 @@
+import unittest
+import unittest.mock
+from io import StringIO
+import logging, sys
+import time
+import socket
+
+from models import *
+import models
+
+class TestHelpers(unittest.TestCase):
+    def test_logger(self):
+        name = "TestingLog"
+        logger = models.setup_custom_logger(name)
+        with unittest.mock.patch('sys.stdout', new = StringIO()) as out:
+            logger.handlers.clear() # remove file creation
+            logging.getLogger(name).addHandler(logging.StreamHandler(out)) # add to output
+
+            strings_to_test = [
+                "This is a test INFO logger call",
+                "This is another test logger call, status INFO",
+                "Test debug call"
+            ]
+            for i in range(len(strings_to_test)): # test that strings are logged correctly
+                logger.info(strings_to_test[i])
+                self.assertEqual(out.getvalue(),\
+                                  "".join(list(map(lambda s: s + '\n', strings_to_test[:i+1]))))
+
+class TestModel(unittest.TestCase):
+
+    def test_producer_connections(self):
+        port1 = 5551
+        port2 = 5552
+        port3 = 5553
+        # each config is structured as [host, listening port, sending port 1, sending port 2]
+        config1=[models.localHost, port1, port2, port3]
+        with unittest.mock.patch("socket.socket") as mock_socket:
+            
+
+            logger = models.setup_custom_logger('process'+str(config1[1]-5550))
+            logger.handlers.clear() # just to make output more condensed
+            try:
+                prod1 = models.producer(logger, config1[2], config1[3])
+            except KeyboardInterrupt:
+                pass
+            mock_socket.return_value.connect.raiseError.side_effect = unittest.mock.Mock(side_effect = socket.error("TestSocketError"))
+            # Assert that sockets are created and called
+            mock_socket.assert_has_calls([unittest.mock.call(socket.AF_INET,socket.SOCK_STREAM), unittest.mock.call(socket.AF_INET,socket.SOCK_STREAM)])
+
+    def test_init_machine(self):
+        port1 = 5551
+        port2 = 5552
+        port3 = 5553
+        # each config is structured as [host, listening port, sending port 1, sending port 2]
+        config1=[models.localHost, port1, port2, port3]
+        with unittest.mock.patch("socket.socket") as mock_socket:
+            try:
+                init_machine(config1)
+            except KeyboardInterrupt:
+                pass
+            except ValueError:
+                pass
+            mock_socket.assert_called_once_with(socket.AF_INET,socket.SOCK_STREAM)
+            mock_socket.return_value.bind.assert_called()
+
+
+if __name__=="__main__":
+    print('\033[1m' + '\033[96m' + "\nUse Ctrl-C for KeyboardInterrupts\n" + '\033[0m')
+    unittest.main()
