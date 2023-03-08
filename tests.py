@@ -4,6 +4,7 @@ from io import StringIO
 import logging, sys
 import time
 import socket
+import random
 
 from models import *
 import models
@@ -62,6 +63,58 @@ class TestModel(unittest.TestCase):
                 pass
             mock_socket.assert_called_once_with(socket.AF_INET,socket.SOCK_STREAM)
             mock_socket.return_value.bind.assert_called()
+    
+    def test_random_event_1(self):
+        # Tests when prob resolves to 1
+        logger = models.setup_custom_logger('blah')
+        logger.handlers.clear()
+        with unittest.mock.patch.object(random, "randint", unittest.mock.Mock(return_value=1)):
+            mock1 = unittest.mock.Mock()
+            mock1.send = unittest.mock.Mock(return_value = None)
+            mock2 = unittest.mock.Mock()
+            mock2.send = unittest.mock.Mock(return_value = None)
+            t = producer_run_random_event(logger, mock1, mock2)
+            mock1.send.assert_called_once()
+            mock2.send.assert_not_called()
+
+    def test_random_event_2(self):
+        # Tests when prob resolves to 2
+        logger = models.setup_custom_logger('blah')
+        logger.handlers.clear()
+        with unittest.mock.patch.object(random, "randint", unittest.mock.Mock(return_value=2)):
+            mock1 = unittest.mock.Mock()
+            mock1.send = unittest.mock.Mock(return_value = None)
+            mock2 = unittest.mock.Mock()
+            mock2.send = unittest.mock.Mock(return_value = None)
+            t = producer_run_random_event(logger, mock1, mock2)
+            mock1.send.assert_not_called()
+            mock2.send.assert_called_once()
+    
+    def test_random_event_3(self):
+        # Tests when prob resolves to 3
+        logger = models.setup_custom_logger('blah')
+        logger.handlers.clear()
+        with unittest.mock.patch.object(random, "randint", unittest.mock.Mock(return_value=3)):
+            mock1 = unittest.mock.Mock()
+            mock1.send = unittest.mock.Mock(return_value = None)
+            mock2 = unittest.mock.Mock()
+            mock2.send = unittest.mock.Mock(return_value = None)
+            t = producer_run_random_event(logger, mock1, mock2)
+            mock1.send.assert_called_once()
+            mock2.send.assert_called_once()
+
+    def test_random_event_internal(self):
+        # Tests when prob resolves to an internal event
+        logger = models.setup_custom_logger('blah')
+        logger.handlers.clear()
+        with unittest.mock.patch.object(random, "randint", unittest.mock.Mock(return_value=5)):
+            mock1 = unittest.mock.Mock()
+            mock1.send = unittest.mock.Mock(return_value = None)
+            mock2 = unittest.mock.Mock()
+            mock2.send = unittest.mock.Mock(return_value = None)
+            t = producer_run_random_event(logger, mock1, mock2)
+            mock1.send.assert_not_called()
+            mock2.send.assert_not_called()
 
 
 if __name__=="__main__":

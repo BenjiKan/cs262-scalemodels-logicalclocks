@@ -41,13 +41,13 @@ def producer_run_random_event(logger, s1: socket.socket, s2: socket.socket):
         s1.send(codeVal.encode('ascii'))
         logger.info("msg sent, logical clock time: "+str(clock_value))
     # if prob == 2, then send message to second other process
-    if prob == 2:
+    elif prob == 2:
         # print("msg sent 2", clock_value)
         codeVal = str(clock_value)
         s2.send(codeVal.encode('ascii'))
         logger.info("msg sent, logical clock time: "+str(clock_value))
     # if prob == 3, then send message to both processes
-    if prob == 3:
+    elif prob == 3:
         # print("msg sent BOTH", clock_value)
         codeVal = str(clock_value)
         s1.send(codeVal.encode('ascii'))
