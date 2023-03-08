@@ -26,7 +26,6 @@ def setup_custom_logger(name):
 
 def consumer(conn):
     # each machine listens on its own consumer thread, which initializes its queue
-
     print("consumer accepted connection" + str(conn)+"\n")
     while True:
         data = conn.recv(1024)
@@ -43,7 +42,6 @@ def producer(portVal1, portVal2):
     s1 = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s2 = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     sleepVal = 1.0/clock_rate
-    # print(sleepVal)
 
     #sema acquire
     try:
@@ -64,10 +62,7 @@ def producer(portVal1, portVal2):
                 # if msg is greater than clock_value, then update clock_value
                 if int(msg) > clock_value:
                     clock_value = int(msg)
-                    # print("clock updated:", clock_value)
-                # else:
-                    # print("clock not updated:", clock_value)
-                
+  
                 logger.info("msg received, logical clock time: "+str(clock_value)+" queue length: "+str(len(msg_queue)))
 
             # if msg_queue empty, generate own event and follow instructions   
@@ -152,10 +147,6 @@ def machine(config):
     prod_thread = Thread(target=producer, args=(config[2], config[3],)) # start a thread for the producer, to send
     prod_thread.start()
  
-    # while True:
-    #     time.sleep(1)
-    #     print("Machine:", int(config[1])-5550, "(clock rate %d)"%(clock_rate), "logical clock value:", clock_value)
-
 
 localHost= "127.0.0.1"
     
@@ -182,12 +173,3 @@ if __name__ == '__main__':
     p1.join()
     p2.join()
     p3.join()
-
-
-# if __name__ == '__main__':
-    
-    # set up logging to file - see previous section for more details
-    
-    # initialize the clocks
-
-    # start the clocks
